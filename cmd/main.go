@@ -1,12 +1,10 @@
 package main
 
 import (
-	"fmt"
-	"goSum/pkg/sum"
-	"os"
+	cli "goSum/cli"
 )
 
-var numbers []int
+var numbers []int32
 
 func init() {
 	// get cli tool flags with numbers to sum up
@@ -14,10 +12,11 @@ func init() {
 }
 
 func main() {
-	numbers = []int{1, 2, 3}
-	result, err := sum.Sum(numbers)
-	if err != nil {
-		os.Exit(1)
-	}
-	fmt.Println(result)
+	cli.Execute()
+	// numbers = []int32{1, 2, 3}
+	// result, err := sum.Calculate(numbers)
+	// if err != nil {
+	// 	os.Exit(1)
+	// }
+	// fmt.Println(result)
 }
