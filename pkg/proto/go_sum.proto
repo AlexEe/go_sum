@@ -11,10 +11,12 @@ service SumService {
   rpc Sum(SumRequest) returns (SumResult) {}
 }
 
+// The request message containing the array of numbers to be added up
 message SumRequest {
   repeated int32 numbers = 1;
 }
 
+// The response message containing the result 
 message SumResult {
   int32 result = 1;
 }
