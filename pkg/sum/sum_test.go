@@ -2,7 +2,7 @@ package sum
 
 import "testing"
 
-func TestMultipleNumbers(t *testing.T) {
+func TestPosAndNegNumbers(t *testing.T) {
 	type test struct {
 		data   []int32
 		answer int32

@@ -15,34 +15,39 @@ import (
 )
 
 const (
-	address = "localhost:8080"
+	addressDefault = "localhost:8080"
 )
 
 var (
 	cfgFile string
 	numbers []int32
+	address string
 )
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:     "GoSum",
-	Short:   "Adds numbers entered on the Command Line",
-	Example: "GoSum -n 4,1,-2",
+	Use:     "sum",
+	Short:   "Add numbers entered on the Command Line",
+	Example: "sum -n 4,1,-2 -u localhost:8080",
 	Run: func(cmd *cobra.Command, args []string) {
-		// var numbers []int32
+		// If address has been set via flag use input
+		// Else use default address
+		if address == "" {
+			address = addressDefault
+		}
 
-		// Set up a connection to the server.
+		// Set up a connection to the server
 		conn, err := grpc.Dial(address, grpc.WithInsecure())
 		if err != nil {
-			log.Fatalf("did not connect: %v", err)
+			log.Fatalf("Did not connect: %v", err)
 		}
 		defer conn.Close()
 		client := proto.NewSumServiceClient(conn)
 
-		// Contact the server and print out its response.
-		// if len(os.Args) > 1 {
-		// numbers = []int32{1, 3, 3}
-		// }
+		// Contact the server and print out its response
+		if len(numbers) < 1 {
+			log.Fatalf("No numbers were entered. Example command: 'sum -n 1,3,4'")
+		}
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		defer cancel()
 		result, err := client.Sum(ctx, &proto.SumRequest{Numbers: numbers})
@@ -70,6 +75,7 @@ func init() {
 	cobra.OnInitialize(initConfig)
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.omniactl.yaml)")
 	rootCmd.Flags().Int32SliceVarP(&numbers, "numbers", "n", []int32{}, "Numbers to be added up")
+	rootCmd.Flags().StringVarP(&address, "url", "u", "", "")
 	// sumCmd.AddSubCommands(rootCmd)
 }
 
