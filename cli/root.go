@@ -1,69 +1,38 @@
 package cmd
 
 import (
-	"context"
 	"fmt"
-	"goSum/pkg/proto"
-	"log"
+	"goSum/cli/sumCmd"
 	"os"
-	"time"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"google.golang.org/grpc"
-)
-
-const (
-	addressDefault = "localhost:8080"
 )
 
 var (
 	cfgFile string
-	numbers []int32
-	address string
 )
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:     "sum",
-	Short:   "Add numbers entered on the Command Line",
-	Example: "sum -n 4,1,-2 -u localhost:8080",
+	Use:   "gocalc",
+	Short: "Perform mathematical calculations on the command line",
 	Run: func(cmd *cobra.Command, args []string) {
-		// If address has been set via flag use input
-		// Else use default address
-		if address == "" {
-			address = addressDefault
-		}
-
-		// Set up a connection to the server
-		conn, err := grpc.Dial(address, grpc.WithInsecure())
-		if err != nil {
-			log.Fatalf("Did not connect: %v", err)
-		}
-		defer conn.Close()
-		client := proto.NewSumServiceClient(conn)
-
-		// Contact the server and print out its response
-		if len(numbers) < 1 {
-			log.Fatalf("No numbers were entered. Example command: 'sum -n 1,3,4'")
-		}
-		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-		defer cancel()
-		result, err := client.Sum(ctx, &proto.SumRequest{Numbers: numbers})
-		if err != nil {
-			log.Fatalf("Could not sum: %v", err)
-		}
-		fmt.Printf("The sum of ")
-		for _, v := range numbers {
-			fmt.Print(v, " ")
-		}
-		fmt.Printf("is %v.\n", result.GetResult())
+		fmt.Println("\nGoCalc: Perform mathematical operations on the command line!")
+		fmt.Print("E.g. 'sum -n 1,3,4,6'\n\n")
 	},
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
+func init() {
+	cobra.OnInitialize(initConfig)
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.omniactl.yaml)")
+
+	// Add more subcommands for different calculations here e.g. minusCmd or moduloCmd
+	sumCmd.AddSubCommands(rootCmd)
+}
+
+// Execute adds all child commands to the root command and sets flags appropriately
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
@@ -71,15 +40,7 @@ func Execute() {
 	}
 }
 
-func init() {
-	cobra.OnInitialize(initConfig)
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.omniactl.yaml)")
-	rootCmd.Flags().Int32SliceVarP(&numbers, "numbers", "n", []int32{}, "Numbers to be added up")
-	rootCmd.Flags().StringVarP(&address, "url", "u", "", "")
-	// sumCmd.AddSubCommands(rootCmd)
-}
-
-// initConfig reads in config file and ENV variables if set.
+// initConfig reads in config file and ENV variables if set
 func initConfig() {
 	if cfgFile != "" {
 		// Use config file from the flag.
