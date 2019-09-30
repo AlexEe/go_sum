@@ -1,24 +1,60 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
-	"goSum/cli/sumCmd"
+	"goSum/pkg/proto"
+	"log"
 	"os"
+	"time"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"google.golang.org/grpc"
 )
 
-var cfgFile string
+const (
+	address = "localhost:8080"
+)
+
+var (
+	cfgFile string
+	numbers []int32
+)
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "goSum",
-	Short: "Adds numbers entered on the Command Line",
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
+	Use:     "GoSum",
+	Short:   "Adds numbers entered on the Command Line",
+	Example: "GoSum -n 4,1,-2",
+	Run: func(cmd *cobra.Command, args []string) {
+		// var numbers []int32
+
+		// Set up a connection to the server.
+		conn, err := grpc.Dial(address, grpc.WithInsecure())
+		if err != nil {
+			log.Fatalf("did not connect: %v", err)
+		}
+		defer conn.Close()
+		client := proto.NewSumServiceClient(conn)
+
+		// Contact the server and print out its response.
+		// if len(os.Args) > 1 {
+		// numbers = []int32{1, 3, 3}
+		// }
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		defer cancel()
+		result, err := client.Sum(ctx, &proto.SumRequest{Numbers: numbers})
+		if err != nil {
+			log.Fatalf("Could not sum: %v", err)
+		}
+		fmt.Printf("The sum of ")
+		for _, v := range numbers {
+			fmt.Print(v, " ")
+		}
+		fmt.Printf("is %v.\n", result.GetResult())
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -32,17 +68,9 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
-
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.omniactl.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-
-	sumCmd.AddSubCommands(rootCmd)
+	rootCmd.Flags().Int32SliceVarP(&numbers, "numbers", "n", []int32{}, "Numbers to be added up")
+	// sumCmd.AddSubCommands(rootCmd)
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -58,9 +86,8 @@ func initConfig() {
 			os.Exit(1)
 		}
 
-		// Search config in home directory with name ".omniactl" (without extension).
 		viper.AddConfigPath(home)
-		viper.SetConfigName(".omniactl")
+		viper.SetConfigName(".gosum")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match
