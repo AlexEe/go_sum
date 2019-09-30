@@ -57,8 +57,14 @@ var sumCmd = &cobra.Command{
 
 		// Print out result of server calculation
 		fmt.Printf("The sum of ")
-		for _, v := range numbers {
-			fmt.Print(v, " ")
+		for i, v := range numbers {
+			if i == len(numbers)-2 {
+				fmt.Print(v, " and ")
+			} else if i == len(numbers)-1 {
+				fmt.Print(v, " ")
+			} else {
+				fmt.Print(v, ", ")
+			}
 		}
 		fmt.Printf("is %v.\n", result.GetResult())
 	},
