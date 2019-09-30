@@ -9,8 +9,9 @@ import (
 var numbers []int32
 
 var sumCmd = &cobra.Command{
-	Use:   "sum",
-	Short: "Create sum of all numbers entered on CLI",
+	Use:     "sum",
+	Short:   "Calculate the sum of all numbers entered on CLI",
+	Example: "sum -n 1, 2, 3",
 	Run: func(cmd *cobra.Command, args []string) {
 		sum.Add(numbers)
 	},
