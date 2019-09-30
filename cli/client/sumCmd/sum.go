@@ -32,6 +32,11 @@ var sumCmd = &cobra.Command{
 			address = addressDefault
 		}
 
+		// Throw error if sum command is entered without specifying numbers to be added
+		if len(numbers) < 1 {
+			log.Fatalf("No numbers were entered. Example command: 'sum -n 1,3,4'")
+		}
+
 		// Set up a connection to the server
 		conn, err := grpc.Dial(address, grpc.WithInsecure())
 		if err != nil {
@@ -40,16 +45,17 @@ var sumCmd = &cobra.Command{
 		defer conn.Close()
 		client := proto.NewSumServiceClient(conn)
 
-		// Contact the server and print out its response
-		if len(numbers) < 1 {
-			log.Fatalf("No numbers were entered. Example command: 'sum -n 1,3,4'")
-		}
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		defer cancel()
+
+		// New client makes request to server with array received through CLI
+		// Server returns result of calculation
 		result, err := client.Sum(ctx, &proto.SumRequest{Numbers: numbers})
 		if err != nil {
 			log.Fatalf("Could not sum: %v", err)
 		}
+
+		// Print out result of server calculation
 		fmt.Printf("The sum of ")
 		for _, v := range numbers {
 			fmt.Print(v, " ")

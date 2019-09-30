@@ -1,8 +1,8 @@
-package cmd
+package client
 
 import (
 	"fmt"
-	"goSum/cli/sumCmd"
+	"goSum/cli/client/sumCmd"
 	"os"
 
 	homedir "github.com/mitchellh/go-homedir"
