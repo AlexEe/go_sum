@@ -17,10 +17,10 @@ var (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "gocalc",
-	Short: "Perform mathematical calculations on the command line",
+	Short: "Perform mathematical calculations from the command line",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("\nGoCalc: Perform mathematical operations on the command line!")
-		fmt.Print("E.g. 'sum -n 1,3,4,6'\n\n")
+		fmt.Println("GoCalc: Perform mathematical operations from the command line!")
+		fmt.Print("E.g. 'sum -n 1,3,4,6'\n")
 	},
 }
 
