@@ -1,0 +1,45 @@
+format_version: 3
+pipelines:
+  deploy_to_cluster:
+    group: gosum
+    label_template: ${COUNT}
+    lock_behavior: none
+    display_order: 3
+    environment_variables:
+    materials:
+      upstream:
+        pipeline: gosum-app
+        stage: gosum-image
+        name: upstream_pipeline
+      SourceCodeRepo:
+        git: https://github.com/alexee/goSum.git
+        shallow_clone: false
+        auto_update: true
+        branch: master
+        name: gosum_repo
+    stages:
+    - deploy_to_cluster:
+        fetch_materials: true
+        keep_artifacts: false
+        clean_workspace: false
+        approval:
+          type: success
+        jobs:
+          deploy:
+            timeout: 0
+            elastic_profile_id: gosum-app
+            tasks:
+            - fetch:
+                options:
+                  EnvironmentVariablePrefix: ''
+                  SkipImagePulling: 'true'
+                artifact_id: bulletin-board
+                pipeline: build_and_publish_image/gosum-app
+                stage: build_and_publish_image
+                job: build_image
+                artifact_origin: external
+                run_if: passed
+            - exec:
+                arguments:
+                command: ./app-deployment.sh
+                run_if: passed

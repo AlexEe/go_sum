@@ -1,0 +1,38 @@
+format_version: 3
+pipelines:
+  test_application:
+    group: sample
+    label_template: ${COUNT}
+    lock_behavior: unlockWhenFinished
+    display_order: 2
+    environment_variables:
+    materials:
+      upstream:
+        pipeline: build_and_publish_image
+        stage: build_and_publish_image
+        name: upstream
+    stages:
+    - test_app_image:
+        fetch_materials: true
+        keep_artifacts: false
+        clean_workspace: false
+        approval:
+          type: success
+        jobs:
+          test_app_image:
+            timeout: 0
+            elastic_profile_id: gosum-app
+            tasks:
+            - fetch:
+                artifact_id: bulletin-board
+                pipeline: build_and_publish_image
+                stage: build_and_publish_image
+                job: build_image
+                artifact_origin: external
+                run_if: passed
+            - exec:
+                arguments:
+                - -c
+                - docker run alexeecode/gosum:$GO_DEPENDENCY_LABEL_UPSTREAM go test ./...
+                command: /bin/bash
+                run_if: passed
