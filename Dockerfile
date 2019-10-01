@@ -1,5 +1,5 @@
 # Import golang base image
-FROM golang:1.13
+FROM golang:1.13 AS builder
 
 # Set the Current Working Directory inside the container
 WORKDIR /app
@@ -14,10 +14,18 @@ RUN go mod download
 COPY . .
 
 # Build the Go server
-RUN go build -o sum_server server/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o sum_server server/main.go
+
+# Final stage
+FROM alpine:latest
+
+RUN apk --no-cache add ca-certificates
+
+WORKDIR /root/
+
+COPY --from=builder /app/sum_server .
+
+CMD [ "./sum_server" ]
 
 # Expose port 8080 to the outside world
 EXPOSE 8080
-
-# Command to run the executable
-CMD ["./sum_server"]
