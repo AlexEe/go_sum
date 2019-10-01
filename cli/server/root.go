@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	portDefault = ":8080"
+	portDefault = "8080"
 )
 
 var (
@@ -40,13 +40,14 @@ func (s *server) Sum(ctx context.Context, request *proto.SumRequest) (*proto.Sum
 var rootCmd = &cobra.Command{
 	Use:     "server",
 	Short:   "Start new server on default port 8080 or specify your own port using -p flag",
-	Example: "-p :8081",
+	Example: "-p 8081",
 	Run: func(cmd *cobra.Command, args []string) {
 		if port == "" {
 			port = portDefault
 		}
-		log.Printf("Starting new server on port%v.\n", port)
+		log.Printf("Starting new server on port %v.\n", port)
 
+		port = fmt.Sprintf(":%v", port)
 		lis, err := net.Listen("tcp", port)
 		if err != nil {
 			log.Fatalf("failed to listen: %v", err)
