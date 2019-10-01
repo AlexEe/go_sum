@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: gosum
-        image: alexee/gosum:1.0.0
+        image: alexeecode/gosum:1.0.0
         ports:
         - containerPort: 80
