@@ -35,16 +35,16 @@ The default port is 8080.
 ```
 go run client/main.go
 ```
-You can specify the url using the flag '-u' or 'url':
-```
-go run client/main.go -u localhost:8080
-```
 ### Use the sum service
 The sum service is started by using the 'sum' subcommand on the CLI,
 followed by the flag '-n' or 'numbers' with an array of numbers, each
 separated by ','.
 ```
 go run client/main.go sum -n 1,2,3
+```
+You can specify the url using the flag '-u' or 'url':
+```
+go run client/main.go -u localhost:8080
 ```
 ### Run the tests
 ```
