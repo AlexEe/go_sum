@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gosum
+  labels:
+    app: gosum
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: gosum
+  template:
+    metadata:
+      labels:
+        app: gosum
+    spec:
+      containers:
+      - name: gosum
+        image: alexee/gosum:1.0.0
+        ports:
+        - containerPort: 80
