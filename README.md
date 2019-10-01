@@ -1,6 +1,6 @@
 # goSum : A service for mathematical operations on the CLI
 
-## Overview [![GoDoc](https://godoc.org/github.com/AlexEe/goSum?status.svg)](https://godoc.org/github.com/AlexEe/goSum)
+## Overview [![Dockerhub]()](https://cloud.docker.com/repository/docker/alexeecode/gosum)
 
 goSum is a microservice written in Golang. A cli client communicates with the external server via gRPC. The client sends an array of ints which is entered via flag input on the command line. The server then calculates the sum of these numbers and returns the result which is printed out on the command line.
 
@@ -12,21 +12,21 @@ go get github.com/AlexEe/goSum
 ```
 ### Run the server
 
-#### With Docker
+#### With Docker image
 ```
 docker run alexee/gosum:1.0.0
 ```
-It is possible to specify a port using the flag '-p' or 'port':
+You can specify a port using the flag '-p' or 'port':
 ```
 docker run alexee/gosum:1.0.0 -p 8080
 ```
 The default port is 8080.
 
-#### Without Docker
+#### Without Docker image
 ```
 go run server/main.go
 ```
-It is possible to specify a port using the flag '-p' or 'port':
+You can specify a port using the flag '-p' or 'port':
 ```
 go run server/main.go -p 8080
 ```
@@ -35,7 +35,7 @@ The default port is 8080.
 ```
 go run client/main.go
 ```
-It is possible to specify the url using the flag '-u' or 'url':
+You can specify the url using the flag '-u' or 'url':
 ```
 go run client/main.go -u localhost:8080
 ```
@@ -45,4 +45,8 @@ followed by the flag '-n' or 'numbers' with an array of numbers, each
 separated by ','.
 ```
 go run client/main.go sum -n 1,2,3
+```
+### Run the tests
+```
+go test ./...
 ```
