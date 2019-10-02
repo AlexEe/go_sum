@@ -60,12 +60,13 @@ func Connect(numbers []int, address string) {
 
 	// New client makes request to server with array received through CLI
 	// Server returns result of calculation
-	result, err := client.Sum(ctx, &proto.SumRequest{Numbers: numbers32})
+	rs, err := client.Sum(ctx, &proto.SumRequest{Numbers: numbers32})
 	if err != nil {
 		log.Fatalf("Could not sum: %v", err)
 	}
 
-	printResult(numbers, result)
+	// Format and print result
+	printResult(numbers, rs)
 }
 
 // printResult prints result of calculation on the CLI
