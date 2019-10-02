@@ -4,7 +4,7 @@
 
 goSum is a microservice written in Golang. A cli client communicates with the external server via gRPC. The client sends an array of ints which is entered via flag input on the command line. The server then calculates the sum of these numbers and returns the result which is printed out on the command line.
 
-Check out the latest [Docker image](https://cloud.docker.com/repository/docker/alexeecode/gosum) here.
+Check out the latest Docker image [here](https://cloud.docker.com/repository/docker/alexeecode/gosum).
 
 ## Install
 
