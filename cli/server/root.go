@@ -25,6 +25,7 @@ var rootCmd = &cobra.Command{
 	},
 }
 
+// Initialize cobra and add flags
 func init() {
 	cobra.OnInitialize(initConfig)
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.omniactl.yaml)")

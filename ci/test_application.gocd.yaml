@@ -33,6 +33,6 @@ pipelines:
             - exec:
                 arguments:
                 - -c
-                - docker run alexeecode/gosum:$GO_DEPENDENCY_LABEL_UPSTREAM go test ./...
+                - docker run alexeecode/gosum:1.0.1 go test ./...
                 command: /bin/bash
                 run_if: passed

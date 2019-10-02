@@ -17,11 +17,12 @@ var (
 	cfgFile string
 )
 
-// rootCmd represents the base command when called without any subcommands
+// rootCmd represents the base command when cli is called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "gosum",
 	Short: "Perform mathematical calculations from the command line",
 	Run: func(cmd *cobra.Command, args []string) {
+		// Print logo
 		whiteBold := color.New(color.FgHiWhite, color.Bold)
 		logo, err := ioutil.ReadFile("logo.txt")
 		if err != nil {
@@ -33,6 +34,7 @@ var rootCmd = &cobra.Command{
 	},
 }
 
+// Initialize cobra and add subcommand 'sum'
 func init() {
 	cobra.OnInitialize(initConfig)
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.omniactl.yaml)")

@@ -33,10 +33,9 @@ func Connect(numbers []int, address string) {
 		address = addressDefault
 	}
 
-	// Throw error if sum command is entered without specifying numbers to be added
+	// If no numbers have been provided via flag, launch prompt
 	if len(numbers) < 1 {
 		numbers = promptNumbers()
-		// log.Fatalf("No numbers were entered. Example command: 'sum -n 1,3,4'")
 	}
 
 	// Convert ints to int32

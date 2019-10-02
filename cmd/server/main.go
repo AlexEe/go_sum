@@ -5,6 +5,7 @@ import (
 	cli "goSum/cli/server"
 )
 
+// Starts the cli
 func main() {
 	cli.Execute()
 }
