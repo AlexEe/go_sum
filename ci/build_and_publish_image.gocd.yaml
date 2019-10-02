@@ -8,7 +8,7 @@ pipelines:
     environment_variables:
     materials:
       git:
-        git: https://github.com/alexee/goSum.git
+        git: https://github.com/alexee/go_sum.git
         shallow_clone: true
         auto_update: true
         branch: master
@@ -30,11 +30,11 @@ pipelines:
                 configuration:
                   options:
                     Image: alexeecode/gosum
-                    Tag: ${GO_PIPELINE_LABEL}
+                    Tag: 1.0.1
             tasks:
             - exec:
                 arguments:
                 - -c
-                - docker build -t $alexeecode/gosum:$GO_PIPELINE_LABEL . -f Dockerfile.application
+                - docker build -t $alexeecode/gosum:1.0.1 . -f Dockerfile.application
                 command: /bin/bash
                 run_if: passed

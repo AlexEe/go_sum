@@ -12,7 +12,7 @@ pipelines:
         stage: gosum-image
         name: upstream_pipeline
       SourceCodeRepo:
-        git: https://github.com/alexee/goSum.git
+        git: https://github.com/alexee/go_sum.git
         shallow_clone: false
         auto_update: true
         branch: master
