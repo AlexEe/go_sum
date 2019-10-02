@@ -3,8 +3,11 @@ package client
 import (
 	"fmt"
 	"goSum/cli/client/sumCmd"
+	"io/ioutil"
+	"log"
 	"os"
 
+	"github.com/fatih/color"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -19,7 +22,13 @@ var rootCmd = &cobra.Command{
 	Use:   "gosum",
 	Short: "Perform mathematical calculations from the command line",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("GoSum: Perform mathematical operations from the command line!")
+		whiteBold := color.New(color.FgHiWhite, color.Bold)
+		logo, err := ioutil.ReadFile("logo.txt")
+		if err != nil {
+			log.Fatalln("Error opening 'logo.txt':", err)
+		}
+		whiteBold.Println(string(logo))
+		fmt.Println("Perform mathematical operations from the command line!")
 		fmt.Print("E.g. 'sum -n 1,3,4,6'\n")
 	},
 }
