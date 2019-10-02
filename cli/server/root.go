@@ -1,22 +1,13 @@
 package server
 
 import (
-	"context"
 	"fmt"
-	"goSum/pkg/calc/sum"
-	"goSum/pkg/proto"
-	"log"
-	"net"
+	"goSum/pkg/server"
 	"os"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"google.golang.org/grpc"
-)
-
-const (
-	portDefault = "8080"
 )
 
 var (
@@ -24,39 +15,13 @@ var (
 	cfgFile string
 )
 
-type server struct{}
-
-func (s *server) Sum(ctx context.Context, request *proto.SumRequest) (*proto.SumResult, error) {
-	// Receive array of ints from request and add them up
-	result, err := sum.Calculate(request.Numbers)
-	if err != nil {
-		os.Exit(1)
-	}
-	// Send back result in response
-	return &proto.SumResult{Result: result}, nil
-}
-
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:     "server",
 	Short:   "Start new server on default port 8080 or specify your own port using -p flag",
 	Example: "-p 8081",
 	Run: func(cmd *cobra.Command, args []string) {
-		if port == "" {
-			port = portDefault
-		}
-		log.Printf("Starting new server on port %v.\n", port)
-
-		port = fmt.Sprintf(":%v", port)
-		lis, err := net.Listen("tcp", port)
-		if err != nil {
-			log.Fatalf("failed to listen: %v", err)
-		}
-		s := grpc.NewServer()
-		proto.RegisterSumServiceServer(s, &server{})
-		if err := s.Serve(lis); err != nil {
-			log.Fatalf("failed to serve: %v", err)
-		}
+		server.Start(port)
 	},
 }
 
