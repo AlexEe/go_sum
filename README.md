@@ -14,37 +14,32 @@ go get github.com/AlexEe/goSum
 
 #### With Docker image
 ```
-docker run alexee/gosum:1.0.0
+docker run -p 8080:8080 alexeecode/gosum:1.0.1
 ```
-You can specify a port using the flag '-p' or 'port':
-```
-docker run alexee/gosum:1.0.0 -p 8080
-```
-The default port is 8080.
-
 #### Without Docker image
 ```
-go run server/main.go
+go run cmd/server/main.go
 ```
 You can specify a port using the flag '-p' or 'port':
 ```
-go run server/main.go -p 8080
+go run cmd/server/main.go -p 8080
 ```
 The default port is 8080.
 ### Run the client
 ```
-go run client/main.go
+go run cmd/client/main.go
 ```
 ### Use the sum service
 The sum service is started by using the 'sum' subcommand on the CLI,
 followed by the flag '-n' or 'numbers' with an array of numbers, each
 separated by ','.
 ```
-go run client/main.go sum -n 1,2,3
+./gosum_cli -n 1,2,3
 ```
+If no numbers are provided, the CLI tool will prompt the user for input from the command line.
 You can specify the url using the flag '-u' or 'url':
 ```
-go run client/main.go -u localhost:8080
+./gosum_cli -u localhost:8080
 ```
 ### Run the tests
 ```
