@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/fatih/color"
 	"github.com/manifoldco/promptui"
 	"google.golang.org/grpc"
 )
@@ -64,24 +65,31 @@ func Connect(numbers []int, address string) {
 		log.Fatalf("Could not sum: %v", err)
 	}
 
+	printResult(numbers, result)
+}
+
+// printResult prints result of calculation on the CLI
+func printResult(numbers []int, result *proto.SumResult) {
+	whiteBold := color.New(color.FgHiWhite, color.Bold)
+
 	switch len(numbers) {
 	case 0:
-		fmt.Println("No numbers were added.")
+		whiteBold.Println("\nNo numbers were added.")
 	case 1:
-		fmt.Printf("Only one number was provided: %v \n", numbers[0])
+		whiteBold.Printf("\nOnly one number was provided: %v \n", numbers[0])
 	default:
 		// Print out result of server calculation
-		fmt.Printf("The sum of ")
+		whiteBold.Printf("\nThe sum of ")
 		for i, v := range numbers {
 			if i == len(numbers)-2 {
-				fmt.Print(v, " and ")
+				whiteBold.Print(v, " and ")
 			} else if i == len(numbers)-1 {
-				fmt.Print(v, " ")
+				whiteBold.Print(v, " ")
 			} else {
-				fmt.Print(v, ", ")
+				whiteBold.Print(v, ", ")
 			}
 		}
-		fmt.Printf("is %v.\n", result.GetResult())
+		whiteBold.Printf("is %v.\n", result.GetResult())
 	}
 }
 
