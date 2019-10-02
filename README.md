@@ -29,19 +29,22 @@ go run cmd/server/main.go -p 8080
 The default port is 8080.
 ### Run the client
 ```
-go run cmd/client/main.go
+./gosum_cli
 ```
 ### Use the sum service
 The sum service is started by using the 'sum' subcommand on the CLI,
 followed by the flag '-n' or 'numbers' with an array of numbers, each
 separated by ','.
 ```
-./gosum_cli -n 1,2,3
+./gosum_cli sum -n 1,2,3
 ```
 If no numbers are provided, the CLI tool will prompt the user for input from the command line.
+```
+./gosum_cli sum
+```
 You can specify the url using the flag '-u' or 'url':
 ```
-./gosum_cli -u localhost:8080
+./gosum_cli sum -u localhost:8080
 ```
 ### Run the tests
 ```
