@@ -25,7 +25,8 @@ WORKDIR /root/
 
 COPY --from=builder /app/sum_server .
 
-CMD [ "./sum_server" ]
-
 # Expose port 8080 to the outside world
 EXPOSE 8080
+
+CMD [ "./sum_server" ]
+
